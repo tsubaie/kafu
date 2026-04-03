@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Avatar } from "@/components/ui/avatar";
 import { LeaderboardRow } from "@/components/ui/leaderboard-row";
 import { EmptyState } from "@/components/ui/empty-state";
 import { cn } from "@/lib/utils";
@@ -57,20 +56,13 @@ function PodiumBlock({ entry, rank }: { entry: LeaderboardEntry; rank: number })
       className="flex flex-col items-center flex-1 max-w-[200px]"
       style={{ animation: `fadeIn 0.5s ease-out ${config.delay} backwards` }}
     >
-      {/* Avatar + Name floating above */}
+      {/* Ribbon + Name floating above */}
       <div className="mb-4 flex flex-col items-center">
-        <div className="relative mb-2">
-          <Avatar
-            name={entry.name}
-            size="lg"
-            className={cn("ring-2 ring-offset-white shadow-lg", config.ring)}
-          />
-          <img
-            src={config.ribbon}
-            alt=""
-            className="absolute -bottom-3 -left-3 h-10 w-10 drop-shadow-lg"
-          />
-        </div>
+        <img
+          src={config.ribbon}
+          alt=""
+          className="h-14 w-14 drop-shadow-lg mb-2"
+        />
         <p className="text-base font-bold text-gray-900 text-center truncate max-w-full">
           {entry.name}
         </p>

@@ -10,20 +10,32 @@ export async function GET() {
   try {
     const session = await getSessionOrThrow();
 
-    const result = await query(
-      `SELECT COALESCE(SUM(credits), 0)::int AS used
-       FROM recognitions
-       WHERE sender_id = $1
-         AND created_at >= date_trunc('month', NOW())`,
-      [session.user.id]
-    );
+    const [usedResult, bonusResult] = await Promise.all([
+      query(
+        `SELECT COALESCE(SUM(credits), 0)::int AS used
+         FROM recognitions
+         WHERE sender_id = $1
+           AND created_at >= date_trunc('month', NOW())`,
+        [session.user.id]
+      ),
+      query(
+        `SELECT COALESCE(SUM(credits), 0)::int AS bonus
+         FROM bonus_credits
+         WHERE user_id = $1
+           AND expires_at > NOW()`,
+        [session.user.id]
+      ),
+    ]);
 
-    const used = result.rows[0].used;
+    const used = usedResult.rows[0].used;
+    const bonus = bonusResult.rows[0].bonus;
+    const total = MONTHLY_CREDITS + bonus;
 
     return NextResponse.json({
-      total: MONTHLY_CREDITS,
+      total,
       used,
-      remaining: MONTHLY_CREDITS - used,
+      remaining: Math.max(0, total - used),
+      bonus,
     });
   } catch (err) {
     if (err instanceof Error && err.message === "Unauthorized") {

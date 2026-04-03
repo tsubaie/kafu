@@ -10,6 +10,7 @@ const balooBhaijaan = Baloo_Bhaijaan_2({
 export const metadata: Metadata = {
   title: "كفوو — تقدير الموظفين",
   description: "نظام تقدير الموظفين - أداء",
+  icons: { icon: "/favicon.svg" },
 };
 
 export default function RootLayout({

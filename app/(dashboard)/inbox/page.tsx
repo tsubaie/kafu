@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Avatar } from "@/components/ui/avatar";
 import { EmptyState } from "@/components/ui/empty-state";
 import { cn } from "@/lib/utils";
 
@@ -130,6 +129,8 @@ export default function InboxPage() {
         </div>
       </div>
 
+      <div className="border-t border-gray-200 mb-8" />
+
       {/* ── Recognition Cards ── */}
       {recognitions.length === 0 ? (
         <EmptyState
@@ -164,6 +165,7 @@ export default function InboxPage() {
                     <div className="flex-1 min-w-0">
                       <p className="text-lg font-bold text-white">
                         كفووو من {r.sender_name}
+                        <span className="text-sm font-medium text-white/50 me-2">{r.sender_department}</span>
                       </p>
                       {r.badge && (
                         <span className="inline-block mt-1 rounded-full bg-white/20 px-3 py-0.5 text-xs font-bold text-white backdrop-blur-sm">
@@ -171,7 +173,6 @@ export default function InboxPage() {
                         </span>
                       )}
                     </div>
-                    <Avatar name={r.sender_name} size="md" className="ring-2 ring-white/30 shadow-lg" />
                   </div>
                 </div>
 
@@ -182,14 +183,9 @@ export default function InboxPage() {
                       {r.message}
                     </p>
                   )}
-                  <div className="flex items-center justify-between">
-                    <p className="text-xs text-gray-400 font-medium">
-                      {r.sender_department}
-                    </p>
-                    <span className="text-xs text-gray-400">
-                      {timeAgo(r.created_at)}
-                    </span>
-                  </div>
+                  <p className="text-xs text-gray-400">
+                    {timeAgo(r.created_at)}
+                  </p>
                 </div>
               </div>
             );

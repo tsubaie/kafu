@@ -22,7 +22,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         if (!limit.allowed) return null;
 
         const result = await query(
-          `SELECT id, email, password_hash, name, department, avatar_url
+          `SELECT id, email, password_hash, name, department, avatar_url, is_admin
            FROM users WHERE email = $1 AND is_active = TRUE`,
           [email]
         );
@@ -44,6 +44,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           name: user.name,
           department: user.department,
           avatarUrl: user.avatar_url,
+          isAdmin: user.is_admin ?? false,
         };
       },
     }),

@@ -10,9 +10,10 @@ export const authConfig: NextAuthConfig = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        const u = user as { department?: string | null; avatarUrl?: string | null };
+        const u = user as { department?: string | null; avatarUrl?: string | null; isAdmin?: boolean };
         token.department = u.department ?? null;
         token.avatarUrl = u.avatarUrl ?? null;
+        token.isAdmin = u.isAdmin ?? false;
       }
       return token;
     },
@@ -21,6 +22,7 @@ export const authConfig: NextAuthConfig = {
         session.user.id = token.sub!;
         session.user.department = token.department as string | null;
         session.user.avatarUrl = token.avatarUrl as string | null;
+        session.user.isAdmin = token.isAdmin as boolean;
       }
       return session;
     },

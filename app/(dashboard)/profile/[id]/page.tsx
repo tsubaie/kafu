@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { Avatar } from "@/components/ui/avatar";
 import { RecognitionCard } from "@/components/ui/recognition-card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { cn } from "@/lib/utils";
@@ -54,7 +53,6 @@ export default function ProfilePage() {
     <div className="mx-auto max-w-2xl">
       {/* Profile Header */}
       <div className="flex items-center gap-4 mb-6">
-        <Avatar name={displayName} size="lg" />
         <div>
           <h1 className="text-xl font-bold text-gray-900">{displayName}</h1>
           {department && (

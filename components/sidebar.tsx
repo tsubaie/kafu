@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { LogOut } from "lucide-react";
 import { signOut } from "next-auth/react";
 import { cn } from "@/lib/utils";
@@ -14,6 +15,8 @@ const navItems = [
 
 export function Sidebar() {
   const pathname = usePathname();
+  const { data: session } = useSession();
+  const isAdmin = session?.user?.isAdmin ?? false;
 
   return (
     <aside className="flex w-72 flex-col bg-gradient-to-b from-primary-700 via-primary-700 to-primary-800 relative overflow-hidden">
@@ -58,6 +61,35 @@ export function Sidebar() {
             </Link>
           );
         })}
+
+        {/* Admin link */}
+        {isAdmin && (
+          <>
+            <div className="my-3 mx-4 border-t border-white/10" />
+            <Link
+              href="/admin"
+              className={cn(
+                "group flex items-center gap-3.5 rounded-2xl px-4 py-3.5 text-sm font-bold transition-all duration-200",
+                pathname === "/admin"
+                  ? "bg-white/20 text-white shadow-lg shadow-primary-900/20 backdrop-blur-sm"
+                  : "text-primary-100 hover:bg-white/10 hover:text-white"
+              )}
+            >
+              <img
+                src="/icons/icons8-admin.svg"
+                alt=""
+                className={cn(
+                  "h-6 w-6 transition-transform duration-200",
+                  pathname === "/admin" ? "scale-110" : "group-hover:scale-105 opacity-80 group-hover:opacity-100"
+                )}
+              />
+              لوحة الإدارة
+              {pathname === "/admin" && (
+                <div className="mr-auto h-2 w-2 rounded-full bg-white shadow-sm shadow-white/50" />
+              )}
+            </Link>
+          </>
+        )}
       </nav>
 
       {/* Sign Out */}

@@ -1,4 +1,3 @@
-import { Avatar } from "@/components/ui/avatar";
 import type { Recognition } from "@/lib/types";
 
 const badgeEmojis: Record<string, string> = {
@@ -26,8 +25,7 @@ export function RecognitionCard({ recognition }: { recognition: Recognition }) {
 
   return (
     <div className="rounded-xl border border-gray-200 bg-white p-4 transition-shadow hover:shadow-sm">
-      <div className="flex items-start gap-3">
-        <Avatar name={recognition.sender_name ?? ""} size="sm" />
+      <div>
         <div className="flex-1 min-w-0">
           <p className="text-sm">
             <span className="font-semibold text-gray-900">

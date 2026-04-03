@@ -1,4 +1,3 @@
-import { Avatar } from "@/components/ui/avatar";
 import type { LeaderboardEntry } from "@/lib/types";
 
 export function LeaderboardRow({
@@ -21,8 +20,6 @@ export function LeaderboardRow({
           alt={`#${rank}`}
           className="shrink-0 h-11 w-11 drop-shadow transition-transform duration-200 group-hover:scale-110"
         />
-
-        <Avatar name={entry.name} size="md" />
 
         <div className="flex-1 min-w-0">
           <p className="text-base font-bold text-gray-900 truncate">
