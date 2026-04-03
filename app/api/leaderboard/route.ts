@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
        WHERE u.is_active = TRUE
        GROUP BY u.id, u.name, u.department, u.avatar_url
        HAVING COALESCE(SUM(r.credits), 0) > 0
-       ORDER BY total_credits DESC, recognition_count DESC
+       ORDER BY total_credits DESC, recognition_count DESC, MIN(r.created_at) ASC
        LIMIT 10`
     );
 

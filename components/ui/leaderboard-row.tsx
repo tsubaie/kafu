@@ -1,48 +1,42 @@
 import { Avatar } from "@/components/ui/avatar";
-import { cn } from "@/lib/utils";
 import type { LeaderboardEntry } from "@/lib/types";
-
-const ribbonIcons: Record<number, string> = {
-  1: "/icons/icons8-first-place-ribbon.svg",
-  2: "/icons/icons8-second-place-ribbon.svg",
-  3: "/icons/icons8-third-place-ribbon.svg",
-};
 
 export function LeaderboardRow({
   entry,
   rank,
+  style,
 }: {
   entry: LeaderboardEntry;
   rank: number;
+  style?: React.CSSProperties;
 }) {
   return (
     <div
-      className={cn(
-        "flex items-center gap-4 rounded-xl border border-gray-200 bg-white px-4 py-3 transition-shadow hover:shadow-sm",
-        rank <= 3 && "border-primary-100"
-      )}
+      className="group rounded-2xl bg-white ring-1 ring-gray-100 p-5 transition-all duration-200 hover:shadow-lg hover:ring-primary-200 hover:scale-[1.01]"
+      style={style}
     >
-      {rank <= 3 ? (
-        <img src={ribbonIcons[rank]} alt={`#${rank}`} className="h-8 w-8" />
-      ) : (
-        <span className="flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold text-gray-400">
-          {rank}
-        </span>
-      )}
-      <Avatar name={entry.name} size="sm" />
-      <div className="flex-1 min-w-0">
-        <p className="text-sm font-semibold text-gray-900 truncate">
-          {entry.name}
-        </p>
-        <p className="text-xs text-gray-500">{entry.department}</p>
-      </div>
-      <div className="text-start">
-        <p className="text-lg font-bold text-primary-600">
-          {entry.total_credits}
-        </p>
-        <p className="text-xs text-gray-500">
-          {entry.recognition_count} تقدير
-        </p>
+      <div className="flex items-center gap-4">
+        <img
+          src="/icons/icons8-medal.svg"
+          alt={`#${rank}`}
+          className="shrink-0 h-11 w-11 drop-shadow transition-transform duration-200 group-hover:scale-110"
+        />
+
+        <Avatar name={entry.name} size="md" />
+
+        <div className="flex-1 min-w-0">
+          <p className="text-base font-bold text-gray-900 truncate">
+            {entry.name}
+          </p>
+          <p className="text-xs text-gray-400 font-medium">{entry.department}</p>
+        </div>
+
+        <div className="shrink-0 flex items-baseline gap-1.5 pe-2">
+          <span className="text-3xl font-bold tabular-nums text-gray-600 transition-colors group-hover:text-primary-600">
+            {entry.total_credits}
+          </span>
+          <span className="text-xs text-gray-400 font-bold">كفو</span>
+        </div>
       </div>
     </div>
   );

@@ -3,11 +3,50 @@
 import { useEffect, useState } from "react";
 import { Avatar } from "@/components/ui/avatar";
 import { EmptyState } from "@/components/ui/empty-state";
-import type { CreditBalance } from "@/lib/types";
+import { cn } from "@/lib/utils";
+
+const badgeConfig: Record<string, {
+  emoji: string;
+  gradient: string;
+  shadow: string;
+}> = {
+  "شقردي": {
+    emoji: "⚡",
+    gradient: "from-amber-400 via-orange-500 to-amber-600",
+    shadow: "shadow-amber-500/20",
+  },
+  "هب ريح": {
+    emoji: "🔥",
+    gradient: "from-rose-400 via-red-500 to-rose-600",
+    shadow: "shadow-red-500/20",
+  },
+  "فزعة": {
+    emoji: "🤝",
+    gradient: "from-sky-400 via-blue-500 to-sky-600",
+    shadow: "shadow-sky-500/20",
+  },
+  "متعاون": {
+    emoji: "💪",
+    gradient: "from-emerald-400 via-teal-500 to-emerald-600",
+    shadow: "shadow-emerald-500/20",
+  },
+  "فنّان": {
+    emoji: "🎨",
+    gradient: "from-violet-400 via-purple-500 to-violet-600",
+    shadow: "shadow-violet-500/20",
+  },
+};
+
+const defaultBadge = {
+  emoji: "⭐",
+  gradient: "from-primary-400 via-primary-500 to-primary-600",
+  shadow: "shadow-primary-500/20",
+};
 
 interface ReceivedRecognition {
   id: string;
   credits: number;
+  badge: string | null;
   message: string;
   created_at: string;
   sender_name: string;
@@ -28,99 +67,150 @@ function timeAgo(dateStr: string) {
 
 export default function InboxPage() {
   const [recognitions, setRecognitions] = useState<ReceivedRecognition[]>([]);
-  const [credits, setCredits] = useState<CreditBalance | null>(null);
+  const [total, setTotal] = useState(0);
+  const [totalCredits, setTotalCredits] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+
+  function loadRecognitions(offset: number) {
+    return fetch(`/api/me/recognitions?offset=${offset}`)
+      .then((r) => r.json())
+      .then((data: { items: ReceivedRecognition[]; total: number; totalCredits: number }) => {
+        if (offset === 0) {
+          setRecognitions(data.items);
+        } else {
+          setRecognitions((prev) => [...prev, ...data.items]);
+        }
+        setTotal(data.total);
+        setTotalCredits(data.totalCredits);
+      });
+  }
 
   useEffect(() => {
-    Promise.all([
-      fetch("/api/me/recognitions").then((r) => r.json()),
-      fetch("/api/me/credits").then((r) => r.json()),
-    ])
-      .then(([r, c]) => {
-        setRecognitions(r);
-        setCredits(c);
-      })
+    loadRecognitions(0)
       .catch(console.error)
       .finally(() => setLoading(false));
   }, []);
 
-  const totalReceived = recognitions.reduce((sum, r) => sum + r.credits, 0);
+  const hasMore = recognitions.length < total;
+
+  function handleLoadMore() {
+    setLoadingMore(true);
+    loadRecognitions(recognitions.length)
+      .catch(console.error)
+      .finally(() => setLoadingMore(false));
+  }
+
+  const totalReceived = totalCredits;
 
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary-200 border-t-primary-600" />
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary-200 border-t-primary-600" />
       </div>
     );
   }
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
-      {/* Summary Cards */}
-      <div className="grid grid-cols-2 gap-4">
-        <div className="rounded-xl border border-gray-200 bg-white p-5">
-          <p className="text-sm text-gray-500">الأرصدة المستلمة</p>
-          <p className="mt-1 text-3xl font-bold text-primary-600">
-            {totalReceived}
-          </p>
-          <p className="mt-0.5 text-xs text-gray-400">الإجمالي</p>
-        </div>
-        <div className="rounded-xl border border-gray-200 bg-white p-5">
-          <p className="text-sm text-gray-500">أرصدة للإرسال</p>
-          <p className="mt-1 text-3xl font-bold text-gray-900">
-            {credits?.remaining ?? 0}
-            <span className="text-lg font-normal text-gray-400">
-              /{credits?.total ?? 5}
-            </span>
-          </p>
-          <p className="mt-0.5 text-xs text-gray-400">هذا الشهر</p>
+    <div className="mx-auto max-w-2xl animate-[fadeIn_0.3s_ease-out]">
+      {/* ── Hero Banner ── */}
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-bl from-primary-500 via-primary-600 to-primary-700 p-8 mb-12">
+        <div className="absolute -top-6 -left-6 h-24 w-24 rounded-full bg-white/10" />
+        <div className="absolute -bottom-4 -right-4 h-16 w-16 rounded-full bg-white/5" />
+        <div className="absolute top-4 right-6 h-8 w-8 rounded-full bg-white/10" />
+
+        <div className="relative flex items-center gap-5">
+          <img src="/icons/icons8-star.svg" alt="" className="h-16 w-16 drop-shadow-lg" />
+          <div>
+            <p className="text-sm font-medium text-primary-100 mb-1">مجموع الكفووات</p>
+            <p className="text-3xl font-bold text-white leading-tight">
+              عندك <span className="text-4xl tabular-nums">{totalReceived}</span> كفوووو ✨
+            </p>
+          </div>
         </div>
       </div>
 
-      {/* Received Recognitions */}
-      <div>
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">
-          التقديرات المستلمة
-        </h2>
-        {recognitions.length === 0 ? (
-          <EmptyState
-            iconSrc="/icons/icons8-alarm.svg"
-            title="لا توجد تقديرات بعد"
-            description="عندما يقدّرك زملاؤك، ستظهر هنا."
-          />
-        ) : (
-          <div className="space-y-3">
-            {recognitions.map((r) => (
+      {/* ── Recognition Cards ── */}
+      {recognitions.length === 0 ? (
+        <EmptyState
+          iconSrc="/icons/icons8-high-five.svg"
+          title="أول كفو في الطريق! 🎉"
+          description="ابدأ بإرسال كفو لزملاءك."
+        />
+      ) : (
+        <div className="space-y-5">
+          {recognitions.map((r, i) => {
+            const badge = r.badge ? (badgeConfig[r.badge] ?? defaultBadge) : defaultBadge;
+            return (
               <div
                 key={r.id}
-                className="rounded-xl border border-gray-200 bg-white p-4 transition-shadow hover:shadow-sm"
+                className={cn(
+                  "group overflow-hidden rounded-2xl bg-white shadow-lg transition-all duration-200 hover:shadow-xl hover:scale-[1.01]",
+                  badge.shadow
+                )}
+                style={{ animationDelay: `${i * 80}ms`, animation: "fadeIn 0.4s ease-out backwards" }}
               >
-                <div className="flex items-start gap-3">
-                  <Avatar name={r.sender_name} size="sm" />
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm font-semibold text-gray-900">
-                        {r.sender_name}
+                {/* ── Colored banner ── */}
+                <div className={cn(
+                  "relative bg-gradient-to-l px-6 py-5",
+                  badge.gradient
+                )}>
+                  {/* Decorative circles */}
+                  <div className="absolute -top-4 -left-4 h-16 w-16 rounded-full bg-white/10" />
+                  <div className="absolute -bottom-3 left-1/3 h-10 w-10 rounded-full bg-white/5" />
+
+                  <div className="relative flex items-center gap-4">
+                    <span className="text-4xl drop-shadow">{badge.emoji}</span>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-lg font-bold text-white">
+                        كفووو من {r.sender_name}
                       </p>
-                      <span className="inline-flex items-center gap-1 rounded-full bg-primary-50 px-2 py-0.5 text-xs font-medium text-primary-700">
-                        <img src="/icons/icons8-coins.svg" alt="" className="h-4 w-4" />
-                        +{r.credits}
-                      </span>
+                      {r.badge && (
+                        <span className="inline-block mt-1 rounded-full bg-white/20 px-3 py-0.5 text-xs font-bold text-white backdrop-blur-sm">
+                          {r.badge}
+                        </span>
+                      )}
                     </div>
-                    <p className="text-xs text-gray-500">
+                    <Avatar name={r.sender_name} size="md" className="ring-2 ring-white/30 shadow-lg" />
+                  </div>
+                </div>
+
+                {/* ── Message area ── */}
+                <div className="px-6 py-4">
+                  {r.message && (
+                    <p className="text-base text-gray-700 leading-relaxed mb-3">
+                      {r.message}
+                    </p>
+                  )}
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs text-gray-400 font-medium">
                       {r.sender_department}
                     </p>
-                    <p className="mt-2 text-sm text-gray-700">{r.message}</p>
-                    <p className="mt-1.5 text-xs text-gray-400">
+                    <span className="text-xs text-gray-400">
                       {timeAgo(r.created_at)}
-                    </p>
+                    </span>
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
-        )}
-      </div>
+            );
+          })}
+
+          {/* Load more */}
+          {hasMore && (
+            <button
+              onClick={handleLoadMore}
+              disabled={loadingMore}
+              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-white ring-1 ring-gray-200 px-6 py-4 text-sm font-bold text-primary-600 hover:bg-primary-50 hover:ring-primary-200 transition-all duration-200 disabled:opacity-50"
+            >
+              {loadingMore ? (
+                <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary-200 border-t-primary-600" />
+              ) : (
+                <>عرض المزيد ({total - recognitions.length} متبقي)</>
+              )}
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }

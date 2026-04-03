@@ -1,12 +1,16 @@
 import { z } from "zod";
 
+const VALID_BADGES = ["شقردي", "هب ريح", "فزعة", "متعاون", "فنّان"] as const;
+
 export const sendRecognitionSchema = z.object({
   receiver_id: z.string().uuid("معرّف الموظف غير صالح"),
   credits: z.number().int().min(1, "الحد الأدنى رصيد واحد").max(5, "الحد الأقصى ٥ أرصدة"),
+  badge: z.enum(VALID_BADGES, { message: "اختر شارة" }),
   message: z
     .string()
-    .min(1, "الرسالة مطلوبة")
-    .max(500, "يجب ألا تتجاوز الرسالة ٥٠٠ حرف"),
+    .max(500, "يجب ألا تتجاوز الرسالة ٥٠٠ حرف")
+    .optional()
+    .default(""),
 });
 
 export const registerSchema = z.object({

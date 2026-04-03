@@ -12,6 +12,7 @@ export interface Recognition {
   sender_id: string;
   receiver_id: string;
   credits: number;
+  badge: string | null;
   message: string;
   created_at: string;
   sender_name?: string;

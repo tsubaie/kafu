@@ -1,6 +1,14 @@
 import { Avatar } from "@/components/ui/avatar";
 import type { Recognition } from "@/lib/types";
 
+const badgeEmojis: Record<string, string> = {
+  "شقردي": "⚡",
+  "هب ريح": "🔥",
+  "فزعة": "🤝",
+  "متعاون": "💪",
+  "فنّان": "🎨",
+};
+
 function timeAgo(dateStr: string) {
   const diff = Date.now() - new Date(dateStr).getTime();
   const minutes = Math.floor(diff / 60000);
@@ -14,6 +22,8 @@ function timeAgo(dateStr: string) {
 }
 
 export function RecognitionCard({ recognition }: { recognition: Recognition }) {
+  const emoji = recognition.badge ? badgeEmojis[recognition.badge] : null;
+
   return (
     <div className="rounded-xl border border-gray-200 bg-white p-4 transition-shadow hover:shadow-sm">
       <div className="flex items-start gap-3">
@@ -28,12 +38,16 @@ export function RecognitionCard({ recognition }: { recognition: Recognition }) {
               {recognition.receiver_name}
             </span>
           </p>
-          <p className="mt-1.5 text-sm text-gray-700">{recognition.message}</p>
-          <div className="mt-2 flex items-center gap-3">
-            <span className="inline-flex items-center gap-1 rounded-full bg-primary-50 px-2 py-0.5 text-xs font-medium text-primary-700">
-              <img src="/icons/icons8-coins.svg" alt="" className="h-4 w-4" />
-              {recognition.credits} رصيد
-            </span>
+          {recognition.message && (
+            <p className="mt-1.5 text-sm text-gray-700">{recognition.message}</p>
+          )}
+          <div className="mt-2 flex items-center gap-2 flex-wrap">
+            {recognition.badge && (
+              <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-semibold text-gray-700">
+                {emoji && <span>{emoji}</span>}
+                {recognition.badge}
+              </span>
+            )}
             <span className="text-xs text-gray-400">
               {timeAgo(recognition.created_at)}
             </span>

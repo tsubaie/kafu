@@ -13,7 +13,7 @@ export async function GET() {
     await getSessionOrThrow();
 
     const result = await query(
-      `SELECT r.id, r.sender_id, r.receiver_id, r.credits, r.message, r.created_at,
+      `SELECT r.id, r.sender_id, r.receiver_id, r.credits, r.badge, r.message, r.created_at,
               s.name AS sender_name, s.department AS sender_department,
               rv.name AS receiver_name, rv.department AS receiver_department
        FROM recognitions r
@@ -77,10 +77,10 @@ export async function POST(request: NextRequest) {
 
       // Insert recognition
       const insertResult = await client.query(
-        `INSERT INTO recognitions (sender_id, receiver_id, credits, message)
-         VALUES ($1, $2, $3, $4)
-         RETURNING id, sender_id, receiver_id, credits, message, created_at`,
-        [session.user.id, data.receiver_id, data.credits, data.message]
+        `INSERT INTO recognitions (sender_id, receiver_id, credits, badge, message)
+         VALUES ($1, $2, $3, $4, $5)
+         RETURNING id, sender_id, receiver_id, credits, badge, message, created_at`,
+        [session.user.id, data.receiver_id, data.credits, data.badge, data.message]
       );
 
       return insertResult.rows[0];

@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS recognitions (
   sender_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   receiver_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   credits INTEGER NOT NULL CHECK (credits >= 1 AND credits <= 5),
+  badge TEXT,
   message TEXT NOT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   CONSTRAINT no_self_recognition CHECK (sender_id <> receiver_id)

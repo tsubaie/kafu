@@ -9,23 +9,23 @@ async function seed() {
   const hash = await bcrypt.hash("password123", 10);
 
   const employees = [
-    { name: "Sarah Al-Rashid", email: "sarah@adaa.gov.sa", department: "Engineering" },
-    { name: "Omar Khalid", email: "omar@adaa.gov.sa", department: "Design" },
-    { name: "Fatima Hassan", email: "fatima@adaa.gov.sa", department: "Product" },
-    { name: "Ahmed Nasser", email: "ahmed@adaa.gov.sa", department: "Engineering" },
-    { name: "Noura Al-Salem", email: "noura@adaa.gov.sa", department: "Operations" },
-    { name: "Khalid Mansour", email: "khalid@adaa.gov.sa", department: "Design" },
-    { name: "Layla Ibrahim", email: "layla@adaa.gov.sa", department: "Product" },
-    { name: "Yousef Al-Tamimi", email: "yousef@adaa.gov.sa", department: "Engineering" },
-    { name: "Mona Abdulaziz", email: "mona@adaa.gov.sa", department: "Operations" },
-    { name: "Tariq Al-Harbi", email: "tariq@adaa.gov.sa", department: "Engineering" },
+    { name: "سارة الراشد", email: "sarah@adaa.gov.sa", department: "الهندسة" },
+    { name: "عمر خالد", email: "omar@adaa.gov.sa", department: "التصميم" },
+    { name: "فاطمة حسن", email: "fatima@adaa.gov.sa", department: "المنتجات" },
+    { name: "أحمد ناصر", email: "ahmed@adaa.gov.sa", department: "الهندسة" },
+    { name: "نورة السالم", email: "noura@adaa.gov.sa", department: "العمليات" },
+    { name: "خالد منصور", email: "khalid@adaa.gov.sa", department: "التصميم" },
+    { name: "ليلى إبراهيم", email: "layla@adaa.gov.sa", department: "المنتجات" },
+    { name: "يوسف التميمي", email: "yousef@adaa.gov.sa", department: "الهندسة" },
+    { name: "منى عبدالعزيز", email: "mona@adaa.gov.sa", department: "العمليات" },
+    { name: "طارق الحربي", email: "tariq@adaa.gov.sa", department: "الهندسة" },
   ];
 
   for (const emp of employees) {
     await pool.query(
       `INSERT INTO users (name, email, password_hash, department)
        VALUES ($1, $2, $3, $4)
-       ON CONFLICT (email) DO UPDATE SET password_hash = EXCLUDED.password_hash`,
+       ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name, department = EXCLUDED.department, password_hash = EXCLUDED.password_hash`,
       [emp.name, emp.email, hash, emp.department]
     );
   }
