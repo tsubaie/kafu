@@ -17,5 +17,18 @@ services:
       timeout: 3s
       retries: 5
 
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "3011:3000"
+    environment:
+      DATABASE_URL: postgresql://kafu:kafu@db:5432/kafu
+      AUTH_SECRET: kafu-dev-secret-change-in-production
+      AUTH_URL: http://localhost:3011
+    depends_on:
+      db:
+        condition: service_healthy
+
 volumes:
   pgdata:
