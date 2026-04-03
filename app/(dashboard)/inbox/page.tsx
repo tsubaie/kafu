@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Inbox, Coins } from "lucide-react";
 import { Avatar } from "@/components/ui/avatar";
 import { EmptyState } from "@/components/ui/empty-state";
 import type { CreditBalance } from "@/lib/types";
@@ -18,13 +17,13 @@ interface ReceivedRecognition {
 function timeAgo(dateStr: string) {
   const diff = Date.now() - new Date(dateStr).getTime();
   const minutes = Math.floor(diff / 60000);
-  if (minutes < 1) return "just now";
-  if (minutes < 60) return `${minutes}m ago`;
+  if (minutes < 1) return "الآن";
+  if (minutes < 60) return `منذ ${minutes} د`;
   const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours}h ago`;
+  if (hours < 24) return `منذ ${hours} س`;
   const days = Math.floor(hours / 24);
-  if (days < 30) return `${days}d ago`;
-  return new Date(dateStr).toLocaleDateString();
+  if (days < 30) return `منذ ${days} ي`;
+  return new Date(dateStr).toLocaleDateString("ar-SA");
 }
 
 export default function InboxPage() {
@@ -60,34 +59,34 @@ export default function InboxPage() {
       {/* Summary Cards */}
       <div className="grid grid-cols-2 gap-4">
         <div className="rounded-xl border border-gray-200 bg-white p-5">
-          <p className="text-sm text-gray-500">Credits Received</p>
+          <p className="text-sm text-gray-500">الأرصدة المستلمة</p>
           <p className="mt-1 text-3xl font-bold text-primary-600">
             {totalReceived}
           </p>
-          <p className="mt-0.5 text-xs text-gray-400">all time</p>
+          <p className="mt-0.5 text-xs text-gray-400">الإجمالي</p>
         </div>
         <div className="rounded-xl border border-gray-200 bg-white p-5">
-          <p className="text-sm text-gray-500">Credits to Give</p>
+          <p className="text-sm text-gray-500">أرصدة للإرسال</p>
           <p className="mt-1 text-3xl font-bold text-gray-900">
             {credits?.remaining ?? 0}
             <span className="text-lg font-normal text-gray-400">
               /{credits?.total ?? 5}
             </span>
           </p>
-          <p className="mt-0.5 text-xs text-gray-400">this month</p>
+          <p className="mt-0.5 text-xs text-gray-400">هذا الشهر</p>
         </div>
       </div>
 
       {/* Received Recognitions */}
       <div>
         <h2 className="text-lg font-semibold text-gray-900 mb-4">
-          Recognitions Received
+          التقديرات المستلمة
         </h2>
         {recognitions.length === 0 ? (
           <EmptyState
-            icon={Inbox}
-            title="No recognitions yet"
-            description="When colleagues recognize you, it will appear here."
+            iconSrc="/icons/icons8-alarm.svg"
+            title="لا توجد تقديرات بعد"
+            description="عندما يقدّرك زملاؤك، ستظهر هنا."
           />
         ) : (
           <div className="space-y-3">
@@ -104,7 +103,7 @@ export default function InboxPage() {
                         {r.sender_name}
                       </p>
                       <span className="inline-flex items-center gap-1 rounded-full bg-primary-50 px-2 py-0.5 text-xs font-medium text-primary-700">
-                        <Coins className="h-3 w-3" />
+                        <img src="/icons/icons8-coins.svg" alt="" className="h-4 w-4" />
                         +{r.credits}
                       </span>
                     </div>

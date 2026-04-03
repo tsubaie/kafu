@@ -1,17 +1,16 @@
 import { Avatar } from "@/components/ui/avatar";
-import { Coins } from "lucide-react";
 import type { Recognition } from "@/lib/types";
 
 function timeAgo(dateStr: string) {
   const diff = Date.now() - new Date(dateStr).getTime();
   const minutes = Math.floor(diff / 60000);
-  if (minutes < 1) return "just now";
-  if (minutes < 60) return `${minutes}m ago`;
+  if (minutes < 1) return "الآن";
+  if (minutes < 60) return `منذ ${minutes} د`;
   const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours}h ago`;
+  if (hours < 24) return `منذ ${hours} س`;
   const days = Math.floor(hours / 24);
-  if (days < 30) return `${days}d ago`;
-  return new Date(dateStr).toLocaleDateString();
+  if (days < 30) return `منذ ${days} ي`;
+  return new Date(dateStr).toLocaleDateString("ar-SA");
 }
 
 export function RecognitionCard({ recognition }: { recognition: Recognition }) {
@@ -24,7 +23,7 @@ export function RecognitionCard({ recognition }: { recognition: Recognition }) {
             <span className="font-semibold text-gray-900">
               {recognition.sender_name}
             </span>
-            <span className="text-gray-500"> recognized </span>
+            <span className="text-gray-500"> قدّر </span>
             <span className="font-semibold text-gray-900">
               {recognition.receiver_name}
             </span>
@@ -32,8 +31,8 @@ export function RecognitionCard({ recognition }: { recognition: Recognition }) {
           <p className="mt-1.5 text-sm text-gray-700">{recognition.message}</p>
           <div className="mt-2 flex items-center gap-3">
             <span className="inline-flex items-center gap-1 rounded-full bg-primary-50 px-2 py-0.5 text-xs font-medium text-primary-700">
-              <Coins className="h-3 w-3" />
-              {recognition.credits} {recognition.credits === 1 ? "credit" : "credits"}
+              <img src="/icons/icons8-coins.svg" alt="" className="h-4 w-4" />
+              {recognition.credits} رصيد
             </span>
             <span className="text-xs text-gray-400">
               {timeAgo(recognition.created_at)}

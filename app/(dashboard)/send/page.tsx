@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Send, CheckCircle, Coins, ChevronDown, X } from "lucide-react";
+import { Send, ChevronDown, X } from "lucide-react";
 import { Avatar } from "@/components/ui/avatar";
 import type { User, CreditBalance } from "@/lib/types";
 
@@ -88,7 +88,7 @@ export default function SendRecognitionPage() {
 
       if (!res.ok) {
         const data = await res.json();
-        setError(data.error || "Failed to send recognition");
+        setError(data.error || "فشل إرسال التقدير");
         return;
       }
 
@@ -96,9 +96,9 @@ export default function SendRecognitionPage() {
       window.dispatchEvent(new Event("credits-updated"));
 
       setSuccess(true);
-      setTimeout(() => router.push("/dashboard"), 2000);
+      setTimeout(() => router.push("/inbox"), 2000);
     } catch {
-      setError("Something went wrong. Please try again.");
+      setError("حدث خطأ ما. يرجى المحاولة مرة أخرى.");
     } finally {
       setSending(false);
     }
@@ -115,12 +115,12 @@ export default function SendRecognitionPage() {
   if (success) {
     return (
       <div className="flex flex-col items-center justify-center py-20">
-        <CheckCircle className="h-16 w-16 text-primary-500" />
+        <img src="/icons/icons8-confetti.svg" alt="" className="h-20 w-20" />
         <h2 className="mt-4 text-xl font-bold text-gray-900">
-          Recognition Sent!
+          تم إرسال التقدير!
         </h2>
         <p className="mt-1 text-sm text-gray-500">
-          {selectedUser?.name} will appreciate it
+          {selectedUser?.name} سيقدّر ذلك
         </p>
       </div>
     );
@@ -130,12 +130,12 @@ export default function SendRecognitionPage() {
     return (
       <div className="mx-auto max-w-lg">
         <div className="rounded-2xl border border-gray-200 bg-white p-8 text-center">
-          <Coins className="mx-auto h-12 w-12 text-gray-300" />
+          <img src="/icons/icons8-empty-hourglass.svg" alt="" className="mx-auto h-16 w-16" />
           <h2 className="mt-4 text-lg font-semibold text-gray-900">
-            No Credits Remaining
+            لا يوجد رصيد متبقي
           </h2>
           <p className="mt-1 text-sm text-gray-500">
-            You&apos;ve used all 5 credits this month. They&apos;ll reset at the start of next month.
+            لقد استخدمت جميع الأرصدة الخمسة هذا الشهر. سيتم تجديدها في بداية الشهر القادم.
           </p>
         </div>
       </div>
@@ -145,7 +145,7 @@ export default function SendRecognitionPage() {
   return (
     <div className="mx-auto max-w-lg">
       <h1 className="text-xl font-bold text-gray-900 mb-6">
-        Send Recognition
+        إرسال تقدير
       </h1>
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -158,7 +158,7 @@ export default function SendRecognitionPage() {
         {/* Employee Searchable Dropdown */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Who do you want to recognize?
+            من تريد أن تقدّر؟
           </label>
           <div ref={dropdownRef} className="relative">
             {selectedUser ? (
@@ -187,7 +187,7 @@ export default function SendRecognitionPage() {
                 }}
                 className="flex w-full items-center justify-between rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-400 hover:border-gray-400 transition-colors"
               >
-                Select an employee...
+                اختر موظفاً...
                 <ChevronDown className="h-4 w-4" />
               </button>
             )}
@@ -198,7 +198,7 @@ export default function SendRecognitionPage() {
                   <input
                     ref={inputRef}
                     type="text"
-                    placeholder="Search by name or department..."
+                    placeholder="ابحث بالاسم أو الإدارة..."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     className="block w-full rounded-md border border-gray-200 px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-primary-500 focus:outline-none"
@@ -210,7 +210,7 @@ export default function SendRecognitionPage() {
                       key={user.id}
                       type="button"
                       onClick={() => selectUser(user)}
-                      className="flex w-full items-center gap-3 px-3 py-2.5 text-left hover:bg-gray-50 transition-colors"
+                      className="flex w-full items-center gap-3 px-3 py-2.5 text-start hover:bg-gray-50 transition-colors"
                     >
                       <Avatar name={user.name} size="sm" />
                       <div>
@@ -223,7 +223,7 @@ export default function SendRecognitionPage() {
                   ))}
                   {filteredUsers.length === 0 && (
                     <p className="px-3 py-4 text-sm text-gray-500 text-center">
-                      No employees found
+                      لم يتم العثور على موظفين
                     </p>
                   )}
                 </div>
@@ -235,7 +235,7 @@ export default function SendRecognitionPage() {
         {/* Message */}
         <div>
           <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
-            Why are you recognizing them?
+            لماذا تقدّرهم؟
           </label>
           <textarea
             id="message"
@@ -245,16 +245,16 @@ export default function SendRecognitionPage() {
             maxLength={500}
             rows={3}
             className="block w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:outline-none resize-none"
-            placeholder="Write a thank-you message..."
+            placeholder="اكتب رسالة شكر..."
           />
-          <p className="mt-1 text-xs text-gray-400 text-right">
+          <p className="mt-1 text-xs text-gray-400 text-start">
             {message.length}/500
           </p>
         </div>
 
         <div className="flex items-center justify-between rounded-lg bg-gray-50 px-4 py-3">
           <span className="text-sm text-gray-600">
-            Credits remaining this month
+            الرصيد المتبقي هذا الشهر
           </span>
           <span className="text-sm font-semibold text-primary-700">
             {remaining}/{credits?.total ?? 5}
@@ -267,7 +267,7 @@ export default function SendRecognitionPage() {
           className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-700 disabled:opacity-50"
         >
           <Send className="h-4 w-4" />
-          {sending ? "Sending..." : "Send 1 Credit"}
+          {sending ? "جارٍ الإرسال..." : "إرسال رصيد واحد"}
         </button>
       </form>
     </div>

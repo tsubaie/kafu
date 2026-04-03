@@ -11,12 +11,12 @@ export async function loginAction(
     await signIn("credentials", {
       email: formData.get("email") as string,
       password: formData.get("password") as string,
-      redirectTo: "/dashboard",
+      redirectTo: "/inbox",
     });
     return null;
   } catch (error) {
     if (error instanceof AuthError) {
-      return { error: "Invalid email or password" };
+      return { error: "البريد الإلكتروني أو كلمة المرور غير صحيحة" };
     }
     throw error;
   }

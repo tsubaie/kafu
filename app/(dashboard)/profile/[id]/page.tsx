@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { Heart, Send as SendIcon } from "lucide-react";
 import { Avatar } from "@/components/ui/avatar";
 import { RecognitionCard } from "@/components/ui/recognition-card";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -42,8 +41,8 @@ export default function ProfilePage() {
       : filtered[0]?.sender_name;
 
   const displayName = isOwnProfile
-    ? session?.user?.name ?? "You"
-    : userName ?? "Employee";
+    ? session?.user?.name ?? "أنت"
+    : userName ?? "موظف";
 
   const department = isOwnProfile
     ? session?.user?.department
@@ -77,7 +76,7 @@ export default function ProfilePage() {
                 : "border-transparent text-gray-500 hover:text-gray-700"
             )}
           >
-            {t === "received" ? "Received" : "Sent"}
+            {t === "received" ? "المستلمة" : "المُرسلة"}
           </button>
         ))}
       </div>
@@ -88,12 +87,12 @@ export default function ProfilePage() {
         </div>
       ) : filtered.length === 0 ? (
         <EmptyState
-          icon={tab === "received" ? Heart : SendIcon}
-          title={`No ${tab} recognitions`}
+          iconSrc={tab === "received" ? "/icons/icons8-star.svg" : "/icons/icons8-high-five.svg"}
+          title={tab === "received" ? "لا توجد تقديرات مستلمة" : "لا توجد تقديرات مُرسلة"}
           description={
             tab === "received"
-              ? "No recognitions received yet."
-              : "No recognitions sent yet."
+              ? "لم يتم استلام أي تقديرات بعد."
+              : "لم يتم إرسال أي تقديرات بعد."
           }
         />
       ) : (

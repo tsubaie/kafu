@@ -21,7 +21,7 @@ export async function registerAction(
 
     const confirmPassword = formData.get("confirmPassword") as string;
     if (data.password !== confirmPassword) {
-      return { error: "Passwords do not match" };
+      return { error: "كلمات المرور غير متطابقة" };
     }
 
     // Check if email already exists
@@ -30,7 +30,7 @@ export async function registerAction(
       [data.email]
     );
     if (existing.rows.length > 0) {
-      return { error: "An account with this email already exists" };
+      return { error: "يوجد حساب مسجّل بهذا البريد الإلكتروني" };
     }
 
     const passwordHash = await bcrypt.hash(data.password, 10);
@@ -44,7 +44,7 @@ export async function registerAction(
     await signIn("credentials", {
       email: data.email,
       password: data.password,
-      redirectTo: "/dashboard",
+      redirectTo: "/inbox",
     });
 
     return null;
@@ -53,7 +53,7 @@ export async function registerAction(
       return { error: error.issues[0].message };
     }
     if (error instanceof AuthError) {
-      return { error: "Account created but could not sign in. Please try logging in." };
+      return { error: "تم إنشاء الحساب لكن تعذّر تسجيل الدخول. يرجى تسجيل الدخول يدوياً." };
     }
     throw error;
   }

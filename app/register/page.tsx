@@ -6,24 +6,24 @@ export default function RegisterPage() {
     <div className="flex min-h-full items-center justify-center px-4 py-8">
       <div className="w-full max-w-sm space-y-6">
         <div className="text-center">
-          <img src="/logo.svg" alt="ADAA" className="mx-auto h-10" />
+          <img src="/logo.svg" alt="أداء" className="mx-auto h-10" />
           <h1 className="mt-4 text-2xl font-bold text-gray-900">
-            Join Kafu
+            انضم إلى كافؤ
           </h1>
           <p className="mt-1 text-sm text-gray-500">
-            Create your account to start recognizing colleagues
+            أنشئ حسابك لتبدأ بتقدير زملائك
           </p>
         </div>
 
         <RegisterForm />
 
         <p className="text-center text-sm text-gray-500">
-          Already have an account?{" "}
+          لديك حساب بالفعل؟{" "}
           <Link
             href="/login"
             className="font-medium text-primary-600 hover:text-primary-700"
           >
-            Sign In
+            تسجيل الدخول
           </Link>
         </p>
       </div>

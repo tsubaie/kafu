@@ -29,15 +29,15 @@ export async function GET(request: NextRequest) {
        GROUP BY u.id, u.name, u.department, u.avatar_url
        HAVING COALESCE(SUM(r.credits), 0) > 0
        ORDER BY total_credits DESC, recognition_count DESC
-       LIMIT 20`
+       LIMIT 10`
     );
 
     return NextResponse.json(result.rows);
   } catch (err) {
     if (err instanceof Error && err.message === "Unauthorized") {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "غير مصرّح" }, { status: 401 });
     }
     console.error("[api/leaderboard] GET error:", err);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json({ error: "خطأ في الخادم" }, { status: 500 });
   }
 }

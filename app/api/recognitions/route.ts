@@ -26,10 +26,10 @@ export async function GET() {
     return NextResponse.json(result.rows);
   } catch (err) {
     if (err instanceof Error && err.message === "Unauthorized") {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "غير مصرّح" }, { status: 401 });
     }
     console.error("[api/recognitions] GET error:", err);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json({ error: "خطأ في الخادم" }, { status: 500 });
   }
 }
 
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
 
     if (data.receiver_id === session.user.id) {
       return NextResponse.json(
-        { error: "You cannot recognize yourself" },
+        { error: "لا يمكنك تقدير نفسك" },
         { status: 400 }
       );
     }
@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
 
       if (data.credits > remaining) {
         throw new Error(
-          `Not enough credits. You have ${remaining} remaining this month.`
+          `رصيد غير كافٍ. لديك ${remaining} متبقي هذا الشهر.`
         );
       }
 
@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
       );
 
       if (receiverResult.rows.length === 0) {
-        throw new Error("Employee not found");
+        throw new Error("الموظف غير موجود");
       }
 
       // Insert recognition
@@ -89,7 +89,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(recognition, { status: 201 });
   } catch (err) {
     if (err instanceof Error && err.message === "Unauthorized") {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "غير مصرّح" }, { status: 401 });
     }
     if (err instanceof ZodError) {
       return NextResponse.json(
@@ -97,10 +97,10 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-    if (err instanceof Error && (err.message.includes("Not enough credits") || err.message === "Employee not found")) {
+    if (err instanceof Error && (err.message.includes("رصيد غير كافٍ") || err.message === "الموظف غير موجود")) {
       return NextResponse.json({ error: err.message }, { status: 400 });
     }
     console.error("[api/recognitions] POST error:", err);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json({ error: "خطأ في الخادم" }, { status: 500 });
   }
 }

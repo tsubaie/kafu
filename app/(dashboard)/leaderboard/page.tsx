@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Trophy } from "lucide-react";
 import { LeaderboardRow } from "@/components/ui/leaderboard-row";
 import { EmptyState } from "@/components/ui/empty-state";
 import { cn } from "@/lib/utils";
@@ -26,7 +25,7 @@ export default function LeaderboardPage() {
   return (
     <div className="mx-auto max-w-2xl">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-xl font-bold text-gray-900">Leaderboard</h1>
+        <h1 className="text-xl font-bold text-gray-900">المتصدرون</h1>
         <div className="flex rounded-lg border border-gray-200 bg-white p-0.5">
           {(["month", "all-time"] as Period[]).map((p) => (
             <button
@@ -39,7 +38,7 @@ export default function LeaderboardPage() {
                   : "text-gray-500 hover:text-gray-700"
               )}
             >
-              {p === "month" ? "This Month" : "All Time"}
+              {p === "month" ? "هذا الشهر" : "الكل"}
             </button>
           ))}
         </div>
@@ -51,12 +50,12 @@ export default function LeaderboardPage() {
         </div>
       ) : entries.length === 0 ? (
         <EmptyState
-          icon={Trophy}
-          title="No recognitions yet"
+          iconSrc="/icons/icons8-trophy.svg"
+          title="لا توجد تقديرات بعد"
           description={
             period === "month"
-              ? "No one has been recognized this month yet. Be the first!"
-              : "No recognitions have been sent yet."
+              ? "لم يتم تقدير أحد هذا الشهر بعد. كن الأول!"
+              : "لم يتم إرسال أي تقديرات بعد."
           }
         />
       ) : (

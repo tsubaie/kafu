@@ -1,20 +1,15 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Baloo_Bhaijaan_2 } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const balooBhaijaan = Baloo_Bhaijaan_2({
+  variable: "--font-baloo-bhaijaan",
+  subsets: ["arabic"],
 });
 
 export const metadata: Metadata = {
-  title: "Kafu — Employee Recognition",
-  description: "ADAA Employee Recognition System",
+  title: "كفوو — تقدير الموظفين",
+  description: "نظام تقدير الموظفين - أداء",
 };
 
 export default function RootLayout({
@@ -24,8 +19,9 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      lang="ar"
+      dir="rtl"
+      className={`${balooBhaijaan.variable} h-full antialiased`}
     >
       <body className="h-full bg-gray-50 text-gray-900">{children}</body>
     </html>

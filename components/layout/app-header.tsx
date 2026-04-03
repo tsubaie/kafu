@@ -2,7 +2,6 @@
 
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useState } from "react";
-import { Coins } from "lucide-react";
 import type { CreditBalance } from "@/lib/types";
 import { Avatar } from "@/components/ui/avatar";
 
@@ -35,12 +34,12 @@ export function AppHeader() {
       <div className="flex items-center gap-4">
         {credits && (
           <div className="flex items-center gap-1.5 rounded-full bg-primary-50 px-3 py-1.5 text-sm font-medium text-primary-700">
-            <Coins className="h-4 w-4" />
-            <span>{credits.remaining}/{credits.total} credits</span>
+            <img src="/icons/icons8-coins.svg" alt="" className="h-5 w-5" />
+            <span>{credits.remaining}/{credits.total} رصيد</span>
           </div>
         )}
         <div className="flex items-center gap-3">
-          <div className="text-right">
+          <div className="text-start">
             <p className="text-sm font-medium text-gray-900">
               {session.user.name}
             </p>

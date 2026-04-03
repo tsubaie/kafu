@@ -19,7 +19,7 @@ export function proxy(request: NextRequest) {
   }
 
   if (hasSession && pathname === "/login") {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+    return NextResponse.redirect(new URL("/inbox", request.url));
   }
 }
 

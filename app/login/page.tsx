@@ -6,24 +6,24 @@ export default function LoginPage() {
     <div className="flex min-h-full items-center justify-center px-4">
       <div className="w-full max-w-sm space-y-6">
         <div className="text-center">
-          <img src="/logo.svg" alt="ADAA" className="mx-auto h-10" />
+          <img src="/logo.svg" alt="أداء" className="mx-auto h-10" />
           <h1 className="mt-4 text-2xl font-bold text-gray-900">
-            Welcome to Kafu
+            مرحباً بك في كافؤ
           </h1>
           <p className="mt-1 text-sm text-gray-500">
-            Sign in to recognize your colleagues
+            سجّل دخولك لتقدير زملائك
           </p>
         </div>
 
         <LoginForm />
 
         <p className="text-center text-sm text-gray-500">
-          Don&apos;t have an account?{" "}
+          ليس لديك حساب؟{" "}
           <Link
             href="/register"
             className="font-medium text-primary-600 hover:text-primary-700"
           >
-            Register
+            تسجيل حساب جديد
           </Link>
         </p>
       </div>

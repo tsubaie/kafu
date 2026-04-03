@@ -27,9 +27,9 @@ export async function GET() {
     });
   } catch (err) {
     if (err instanceof Error && err.message === "Unauthorized") {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "غير مصرّح" }, { status: 401 });
     }
     console.error("[api/me/credits] GET error:", err);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json({ error: "خطأ في الخادم" }, { status: 500 });
   }
 }
