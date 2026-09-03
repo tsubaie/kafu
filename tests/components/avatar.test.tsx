@@ -36,7 +36,9 @@ describe("Avatar", () => {
   it("returns consistent color for same name", () => {
     const { container: first } = render(<Avatar name="سارة" />);
     const { container: second } = render(<Avatar name="سارة" />);
-    expect(first.firstChild?.className).toBe(second.firstChild?.className);
+    expect(first.firstElementChild?.className).toBe(
+      second.firstElementChild?.className
+    );
   });
 
   it("handles empty string gracefully", () => {
